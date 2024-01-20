@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
-import {Container, Typography, Stack, Box, TextField, Button, Link} from '@mui/material'
+import {Container, Typography, Stack, Box, TextField, Button, Link, CircularProgress} from '@mui/material'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const SignUpPage = () => {
 
@@ -13,19 +15,52 @@ const SignUpPage = () => {
     const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
 
+    const navigate = useNavigate()
+
     const checkPassword = () : boolean => {
         return password === confirm
     }
 
     const signUp = async () => {
+        setLoading(true)
+        setShowErrorMessage(false)
+        setErrorMessage('')
+
         try {
             if (!checkPassword()) {
                 throw new Error("Passwords must be the same")
             }
+
+            const response = await axios.post("http://localhost:5065/api/v1/users/create",
+            {
+                firstName : firstName,
+                lastName : lastName,
+                email : email,
+                username : username,
+                password : password
+            })
+
+            if (response.status !== 200) {
+                throw new Error("Could not create user")
+            }
+
+            navigate("/")
+
         } catch (error : any) {
+            clearData()
+            setLoading(false)
             setErrorMessage(error.message)
             setShowErrorMessage(true)
         }
+    }
+
+    const clearData = () => {
+        setFirstName('')
+        setLastName('')
+        setEmail('')
+        setUsername('')
+        setPassword('')
+        setConfirm('')
     }
 
     return (
@@ -49,13 +84,21 @@ const SignUpPage = () => {
                     <TextField label={"Confirm Password"} value={confirm} type="password" onChange={e => setConfirm(e.target.value)} />
                 </Stack>
                 <Stack direction={"row"} spacing={4}>
-                    <Button variant={"contained"}>
+                    <Button variant={"contained"} disabled={loading}>
                         <Link href="/" sx={{color: 'white'}} underline={"none"}>Login</Link>
                     </Button>
-                    <Button variant={"contained"}>
+                    <Button variant={"contained"} disabled={loading} onClick={signUp}>
                         Sign Up
                     </Button>
                 </Stack>
+                {loading &&
+                    <CircularProgress />
+                }
+                {showErrorMessage &&
+                    <Typography variant={"h6"} sx={{color : "red"}}>
+                        {errorMessage}
+                    </Typography>
+                }
             </Stack>
         </Container>
     )
