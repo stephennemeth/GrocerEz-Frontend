@@ -1,6 +1,6 @@
 import React from 'react'
 import AppBar from '@mui/material/AppBar';
-import {Container, FormControlLabel, Stack, Switch} from "@mui/material";
+import {FormControlLabel, Stack, Switch} from "@mui/material";
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -10,8 +10,6 @@ const NavBar = () => {
 
     return (
         <AppBar position="static">
-            <Container
-                sx={{ml : '0px', mr : '0px' }}>
                 <Stack
                     direction="row"
                     spacing={2}
@@ -38,7 +36,6 @@ const NavBar = () => {
                         <AccountCircleIcon fontSize="large" />
                     </Stack>
                 </Stack>
-            </Container>
         </AppBar>
     )
 }

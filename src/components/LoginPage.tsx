@@ -1,6 +1,8 @@
 import {Container, Typography, Stack, Box, TextField, Button, Link, CircularProgress} from '@mui/material'
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import UserContext from '../context/UserContext';
 
 const LoginPage = () => {
 
@@ -9,6 +11,11 @@ const LoginPage = () => {
     const [errorMessage, setErrorMessage] = useState<string>('')
     const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
+
+    const navigate = useNavigate()
+
+    const { setUserId } = useContext(UserContext) as UserContextType;
+
 
 
     const login = async () => {
@@ -25,10 +32,15 @@ const LoginPage = () => {
                 throw new Error("Could not login")
             }
 
+            
+            setUserId(response.data)
+                  
             setErrorMessage("Logged in successfully")
 
             setShowErrorMessage(true)
             setLoading(false)
+
+            navigate("/mylists")
 
         } catch (error : any) {
             setLoading(false)
