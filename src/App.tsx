@@ -5,16 +5,10 @@ import LoginPage from "./components/LoginPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SignUpPage from "./components/SignUpPage";
 import ListPage from './components/ListPage';
-import { useState } from 'react';
 import UserContext from './context/UserContext';
+import { getUserId, setUserId } from './api/user';
 
 function App() {
-
-  const [userId, setUserId] = useState<number | null>(null)
-  
-  const getUserId = () : number | null => {
-    return userId
-  }
 
   return (
     <div className="App">

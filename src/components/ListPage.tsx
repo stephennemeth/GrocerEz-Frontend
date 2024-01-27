@@ -32,15 +32,17 @@ const ListPage = () => {
             setListLoading(false)
         }
     }
+
     useEffect(() => {
 
         if (userContext.getUserId() === null) {
             navigate("/")
         } else {
-            if (lists.length == 0) {
+            if (lists.length === 0) {
                 getLists()
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -66,7 +68,7 @@ const ListPage = () => {
                     </Stack>
                 }
 
-            <AddListModal />
+            <AddListModal lists={lists} setLists={setLists}/>
             </Stack>
             <Stack sx={{height: "50rem", width: "30%", border:"solid blue", borderRadius: "10px"}}>
 
