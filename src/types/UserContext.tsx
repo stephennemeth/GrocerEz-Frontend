@@ -1,5 +1,8 @@
+import UserContext from "../context/UserContext"
+
 type UserContextType = {
-    userId: number | null
     setUserId: (userId: number) => void
-    getUserId: () => number
+    getUserId: () => number | null
 }
+
+export default UserContextType

@@ -12,11 +12,14 @@ const LoginPage = () => {
     const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
 
+
     const navigate = useNavigate()
 
-    const { setUserId } = useContext(UserContext) as UserContextType;
+    const userContext = useContext(UserContext)
 
-
+    if (userContext === null || userContext === undefined) {
+        throw new Error("User context is null or undefined")
+    }
 
     const login = async () => {
 
@@ -33,8 +36,8 @@ const LoginPage = () => {
             }
 
             
-            setUserId(response.data)
-                  
+            userContext.setUserId(response.data)
+
             setErrorMessage("Logged in successfully")
 
             setShowErrorMessage(true)

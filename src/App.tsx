@@ -12,9 +12,13 @@ function App() {
 
   const [userId, setUserId] = useState<number | null>(null)
   
+  const getUserId = () : number | null => {
+    return userId
+  }
+
   return (
     <div className="App">
-      <UserContext.Provider value={{userId, setUserId, getUserId: () => userId!}}>
+      <UserContext.Provider value={{setUserId, getUserId}}>
         <BrowserRouter>
             <NavBar />
             <Routes>
