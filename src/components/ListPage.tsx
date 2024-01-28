@@ -1,16 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import GroceryList from "../types/GroceryList";
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { getGroceryLists } from "../api/grocerylist";
 import AddListModal from "./AddListModal";
+import EditListProxyModal from "./EditListPoxyModal";
+import EditIcon from '@mui/icons-material/Edit';
+import { Edit } from "@mui/icons-material";
 
 const ListPage = () => {
 
     const [lists, setLists] = useState<GroceryList[]>([])
     const [listLoading, setListLoading] = useState<boolean>(false)
     const [listErrorMessage, setListErrorMessage] = useState<string>('')
+
+    const [showErrorProxyModal, setShowErrorProxyModal] = useState<boolean>(false)
+    const [currentListId, setCurrentListId] = useState<number>(0)
 
     const navigate = useNavigate()
     const userContext = useContext(UserContext)
@@ -31,6 +37,11 @@ const ListPage = () => {
         } finally {
             setListLoading(false)
         }
+    }
+
+    const editList = (listId : number) => {
+        setShowErrorProxyModal(true)
+        setCurrentListId(listId)
     }
 
     useEffect(() => {
@@ -61,12 +72,19 @@ const ListPage = () => {
                 {lists.length > 0 &&
                     <Stack>
                         {lists.map((list) => (
-                            <Typography variant={"h6"} key={list.listId}>
-                                {list.listId}
-                            </Typography>
+                            <Stack direction={"row"} spacing={2} justifyContent={"center"} key={list.listId}>
+                                <Typography key={list.listId} variant={"h6"}>
+                                    {list.listId}
+                                </Typography>
+                                <Button key={list.listId} onClick={() => editList(list.listId)}>
+                                    <EditIcon />
+                                </Button>
+                            </Stack>
                         ))}
                     </Stack>
                 }
+
+            <EditListProxyModal listId={1} openModal={showErrorProxyModal} setOpenModal={setShowErrorProxyModal}/>
 
             <AddListModal lists={lists} setLists={setLists}/>
             </Stack>

@@ -60,3 +60,15 @@ const editGroceryList = async (listId : number, listName: string, listDescriptio
 
     return data
 }
+
+export const getGroceryList = async (listId : number) : Promise<GroceryList> => {
+
+    const response = await fetch(`${BASE_URL}/grocerylist/list/${listId}`)
+
+    if (response.status !== 200) {
+        throw new Error("Could not get list, try again later")
+    }
+
+    const data = await response.json()
+    return data
+}
